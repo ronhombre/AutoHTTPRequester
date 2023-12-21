@@ -1,0 +1,15 @@
+{
+  "url": "https://example.com",
+  "method": "GET",
+  "headers": {
+    "Authorization": "Bearer INSERT_API_TOKEN",
+    "Content-Type": "application/json"
+  },
+  "data": {
+    "content": "$ipv6",
+    "type": "AAAA",
+    "name": "example.com",
+    "proxied": true,
+    "comment": "Modified on $time using Kotlin!"
+  }
+}
