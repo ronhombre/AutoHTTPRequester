@@ -26,6 +26,11 @@ import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.Date
 
+//Cache in memory
+val ipv6 = getIPV6()
+val ipv4 = getIPV4()
+
+//TODO: Handle failed connections
 fun main() {
     val currentDirectory = System.getProperty("user.dir") //Jar location directory
 
@@ -52,10 +57,10 @@ fun main() {
         val value = data.get(d).asString
         //TODO: Improve and use replaceAll
         if(value.contains("\$ipv4")) {
-            val newJsonElement = JsonPrimitive(value.replace("\$ipv4", getIPV4()))
+            val newJsonElement = JsonPrimitive(value.replace("\$ipv4", ipv4))
             newData.add(d, newJsonElement)
         } else if(value.contains("\$ipv6")) {
-            val newJsonElement = JsonPrimitive(value.replace("\$ipv6", getIPV6()))
+            val newJsonElement = JsonPrimitive(value.replace("\$ipv6", ipv6))
             newData.add(d, newJsonElement)
         } else if(value.contains("\$time")) {
             val newJsonElement = JsonPrimitive(value.replace("\$time", getTime()))
@@ -77,32 +82,30 @@ fun readFile(filename: String): String {
 }
 
 //TODO: Customizable variables
-//TODO: Cache values
 fun getIPV4(): String {
-    val url = URL("https://checkip.amazonaws.com/")
+    val url = URL("http://ipv4.lookup.test-ipv6.com/")
     val connection = url.openConnection() as HttpURLConnection
 
     connection.requestMethod = "GET"
 
     connection.connect()
 
-    return String(connection.inputStream.readAllBytes())
+    val json = JsonParser.parseString(String(connection.inputStream.readAllBytes())).asJsonObject
+
+    return json.get("ip").asString
 }
 
 fun getIPV6(): String {
-    val url = URL("http://checkipv6.dyndns.com/")
+    val url = URL("http://ipv6.lookup.test-ipv6.com/")
     val connection = url.openConnection() as HttpURLConnection
 
     connection.requestMethod = "GET"
 
     connection.connect()
 
-    val rawBytes = connection.inputStream.readAllBytes()
+    val json = JsonParser.parseString(String(connection.inputStream.readAllBytes())).asJsonObject
 
-    //Removes "<html><head><title>Current IP Check</title></head><body>Current IP Address: " and "</body></html>"
-    val trimmedBytes = rawBytes.copyOfRange(76, rawBytes.size - 16)
-
-    return String(trimmedBytes)
+    return json.get("ip").asString
 }
 
 fun getTime(): String {

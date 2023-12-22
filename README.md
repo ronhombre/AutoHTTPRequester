@@ -10,8 +10,8 @@ modifying my DNS Records.
 
 ## Details
 
-Compile it using Gradle 8.2 and Kotlin 1.9.21. Then create a ```http_options.json``` file. See the included example. Afterward,
-run it using ```java -jar AutoHTTPRequester-0.0.1.jar``` and make sure ```http_options.json``` is in the same directory.
+Compile it using Gradle 8.2 ```gradle jar``` and Kotlin 1.9.21. Then create a ```http_options.json``` file. See the included example. Afterward,
+run it using ```java -jar AutoHTTPRequester-0.0.2.jar``` and make sure ```http_options.json``` is in the same directory.
 
 ## Future Updates?
 
